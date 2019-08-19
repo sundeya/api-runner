@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lemon.api.api.dao.ApiMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lemon.api.api.pojo.Api">
+        <id column="id" property="id" />
+        <result column="api_classifi_id" property="apiClassifiId" />
+        <result column="name" property="name" />
+        <result column="method" property="method" />
+        <result column="url" property="url" />
+        <result column="create_user" property="createUser" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, api_classifi_id, name, method, url, create_user, create_time
+    </sql>
+    <select id="finaAllApis" parameterType="String" resultType="showApiList">
+    SELECT
+    api.id as apiId,api.name as apiName,api.method as apiMethod,api.url as apiUrl,api_classification.name as apiClassifiName
+    from
+    api,api_classification WHERE api.api_classifi_id=api_classification.id
+    AND api_classification.project_id=#{projectId};
+    </select>
+    <select id="finaAllApisByClassifi" parameterType="String" resultType="showApiList">
+    SELECT
+    api.id as apiId,api.name as apiName,api.method as apiMethod,api.url as apiUrl,api_classification.name as apiClassifiName
+    from api,api_classification WHERE api.api_classifi_id=api_classification.id
+    AND api_classification.id=#{apiClassificationId};
+    </select>
+    <select id="findMenuVOs" parameterType="string" resultType="menuVO">
+        SELECT
+            api_classification.name as firstLevelMenu,
+            api.name as secondLevelMenu
+            FROM
+                api
+            INNER JOIN api_classification ON api.api_classifi_id = api_classification.id
+            WHERE
+                api.id = #{apiId};
+    </select>
+    <select id="findApiPreview" parameterType="string" resultType="apiPreview">
+        SELECT
+            api.name as apiName,api.method as apiMethod,api.url as apiUrl,user.username as createUser,api.create_time as createUser
+        FROM
+              api
+        LEFT JOIN user
+        ON user.id = api.create_user
+        WHERE
+              api.id = #{apiId};
+    </select>
+</mapper>

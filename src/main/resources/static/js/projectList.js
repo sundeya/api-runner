@@ -24,7 +24,7 @@
 						dataType:'json',
 						async:false,
 						success:function(ret){
-							if(ret.isSuccess=="1"){
+							if(ret.status=="1"){
 								dialog.close();
 								window.location.reload();
 							}

@@ -36,17 +36,21 @@ $(function() {
 								return;
 							$.ajax({
 								url : lemon.config.global.rootUrl
-										+ "/api/addClassification?projectId="
+										+ "/apiClass/addClassification?projectId="
 										+ projectId,
 								data : $form.serialize(),
 								type : 'post',
 								dataType : 'json',
 								async : false,
 								success : function(ret) {
-									dialog.close();
-									window.location.reload();
+									if(ret.status=="1"){
+										dialog.close();
+										window.location.reload();
+									}
+
 								}
 							});
+
 
 						}
 					}

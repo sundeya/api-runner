@@ -3,4 +3,18 @@ server:
   servlet:
     context-path: /lemon
 spring:
-  mvc:
+  freemarker:
+    suffix: .ftl
+    content-type: text/html
+    charset: UTF-8
+    cache: false
+    template-loader-path: classpath:/static/template
+    request-context-attribute: request
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.126.130:3306/api-runner?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
+    username: root
+    password: 123456
+mybatis-plus:
+  mapper-locations: mapper/*.xml
+  type-aliases-package: com.lemon.api.api.pojo

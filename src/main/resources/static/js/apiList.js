@@ -20,7 +20,7 @@ function showApi(id){
 	var baseUrl = lemon.config.global.rootUrl;
 	var menuFindurl = baseUrl+"/index/findApiSelectedMenu?apiId="+id;
 	var data = {"apiId":id};
-	var turn2Page = baseUrl+"/api/find?id="+id;
+	var turn2Page = baseUrl+"/api/toApiView?apiId="+id;
 	//跳转到对应页面，并选中对应菜单
 	selectMenuAndTurn2Page(menuFindurl,data,turn2Page);
 }
@@ -31,18 +31,19 @@ function pagingDataBuild(pagedata){
 	var html = '';
 	var baseUrl = lemon.config.global.rootUrl;
 	for(var i=0;i<pagedata.length;i++){
+
 		html += '<li><ul class="clearfix">';
 
-		html += '<li><a href="#" onclick="showApi('+pagedata[i].id+')">'+pagedata[i].apiName+'</a></li>';
-
-		html += '<li><i class="icon-badge">'+pagedata[i].apiRequestMethod.toUpperCase()+'</i>'+pagedata[i].apiRequestUrl+'</li>';
-		html += '<li>'+pagedata[i].apiBelongedClassification+'</li>';
+		html += '<li><a href="#" onclick="showApi('+pagedata[i].apiId+')">'+pagedata[i].apiName+'</a></li>';
+		html += '<li><i class="icon-badge">'+pagedata[i].apiMethod.toUpperCase()+'</i>'+pagedata[i].apiUrl+'</li>';
+		html += '<li>'+pagedata[i].apiClassifiName+'</li>';
 		html += '</li>';
 		html += '<li>';
 		html += '<i class="icon-circle '+(status == 1 ? 'active' : '')+'"></i>'+(status == 1 ? '已完成' : '未完成');
 		html += '</li>';
 		html += '</ul></li>';
 	}
+
 	return html;
 }
 
@@ -54,6 +55,7 @@ function pagingDataBuild(pagedata){
 function pagingDataShow(pagedata,pageNum){
 	var interDataGroup = interDataPaging(pagedata,pageNum);
 	//分页
+	//alert(pagedata);
 	$('#pagination').pagination({
 	    totalData: pagedata.length,
 	    showData: pageNum,
@@ -70,9 +72,16 @@ function pagingDataShow(pagedata,pageNum){
 
 $(function(){
 	var projectId = $("[name='projectId']").val()==undefined?"":$("[name='projectId']").val();
-	var classificationId = $("[name='classificationId']").val()==undefined?"":$("[name='classificationId']").val();
+	var apiClassificationId = $("[name='apiClassificationId']").val()==undefined?"":$("[name='apiClassificationId']").val();
 	//获取数据接口
-	var listUrl = lemon.config.global.rootUrl+"/api/loadDatas4Show?projectId="+projectId+"&classificationId="+classificationId;
+	var listUrl = "";
+	if (projectId!=""){
+		listUrl =lemon.config.global.rootUrl+"/api/showAllApis?projectId="+projectId;
+	}else if(apiClassificationId!=""){
+
+		listUrl =lemon.config.global.rootUrl+"/api/showAllApisByClassifi?apiClassificationId="+apiClassificationId;
+	}
+
 	$.post(listUrl,function(ret){
 		$(".desctit-interlist span").text("("+ret.data.length+")");
 		if(ret!=null&&ret.data.length>0){
@@ -103,16 +112,16 @@ $(function(){
 
 	//添加接口的弹窗
 	$('.btn-addinter').click(function(){
-		var url = lemon.config.global.rootUrl+"/api/getAllClassification";
+		var url = lemon.config.global.rootUrl+"/apiClass/getAllClassification";
 		//准备分类下拉框数据
 		$.post(url,{"projectId":projectId},function(ret){
-			if(ret.isSuccess=="1"){
+			if(ret.status=="1"){
 				var options = "";
 				$.each(ret.data,function(ind,ele){
 					options+=("<option value='"+ele.id+"'>"+ele.name+"</option>");
 				});
-				$("[name='classificationId']").html();
-				$("[name='classificationId']").html(options);
+				$("[name='apiClassificationId']").html();
+				$("[name='apiClassificationId']").html(options);
 			}
 			var dialog = jqueryAlert({
 			    'style'   : 'pc',
@@ -138,7 +147,7 @@ $(function(){
 			        		dataType:'json',
 			        		async:false,
 			        		success:function(ret){
-			        			if(ret.isSuccess=="1"){
+			        			if(ret.status=="1"){
 			        				dialog.close();
 			        				window.location.reload();
 			        			}else{

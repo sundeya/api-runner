@@ -37,14 +37,14 @@ function attachValidate(selector){
 
 function selectMenuAndTurn2Page(menuFindurl,data,turn2Page){
 	$.post(menuFindurl,data,function(ret){
-		if(ret.isSuccess=="1"){
+		if(ret.status=="1"){
 			//一级菜单名
 			var firstLevelMenu = ret.data.firstLevelMenu;
 			//二级菜单名
 			var secondLevelMenu = ret.data.secondLevelMenu;
 			//选中对应菜单
 			//先判断当前一级菜单是否已经是选中状态
-			if(!parent.$(window.parent.document).find("a:contains("+firstLevelMenu+")").parent().parent("li").hasClass("active")){
+			if(!parent.$(window.parent.document).find("a:contains("+secondLevelMenu+")").parent("li").parent().hasClass("active")){
 				parent.$(window.parent.document).find("a:contains("+firstLevelMenu+")").click();
 			}
 			//先判断当前二级菜单是否已经是选中状态

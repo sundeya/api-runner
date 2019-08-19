@@ -1,0 +1,26 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lemon.api.api.dao.ApiCLassificationMapper">
+    <insert id="addApi" parameterType="apiClassification">
+    	insert into api_classification(project_id,name,description,create_user,create_time)
+    	values(#{projectId},#{name},#{description},#{createUser},#{createTime});
+    </insert>
+    <select id="findAllApiClassifi" parameterType="string" resultMap="aa">
+        SELECT
+	api_classification.id,api_classification.name,api.id as apiId,api.name as apiName
+FROM
+	api_classification
+LEFT JOIN api ON api.api_classifi_id = api_classification.id
+where api_classification.project_id=#{projectId};
+    </select>
+    <resultMap id="aa" type="apiClassification">
+        <result column="id" property="id"></result>
+        <result column="name" property="name"></result>
+        <collection property="apiAndclassifis" ofType="ApiAndclassifi">
+            <result column="apiId" property="apiId"></result>
+            <result column="apiName" property="apiName"></result>
+        </collection>
+    </resultMap>
+</mapper>
