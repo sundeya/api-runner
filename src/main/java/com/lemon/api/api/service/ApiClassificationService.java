@@ -10,4 +10,6 @@ public interface ApiClassificationService {
     public void addApi(ApiClassification apiClassification) throws Exception;
 
     public List<ApiClassification> findAllApiClassifi(String projectId) throws Exception;
+
+    List<ApiClassification> findAllApiClassByClassifiId(String apiClassifiId) throws Exception;
 }

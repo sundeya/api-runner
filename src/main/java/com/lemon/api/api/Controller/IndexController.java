@@ -1,18 +1,18 @@
 package com.lemon.api.api.Controller;
 
-import com.lemon.api.api.pojo.ApiAndclassifi;
-import com.lemon.api.api.pojo.ApiClassification;
-import com.lemon.api.api.pojo.MenuVO;
-import com.lemon.api.api.pojo.Result;
+import com.lemon.api.api.pojo.*;
 import com.lemon.api.api.service.ApiClassificationService;
 import com.lemon.api.api.service.IApiService;
+import com.lemon.api.api.service.ISuiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/index")
@@ -21,19 +21,38 @@ public class IndexController {
     private ApiClassificationService apiClassificationService;
     @Autowired
     private IApiService iApiService;
+    @Autowired
+    private ISuiteService suiteService;
     @RequestMapping("/toindex")
-    public ModelAndView modelAndView(String projectId){
+    public ModelAndView modelAndView(String projectId,String tab){
         ModelAndView modelAndView=new ModelAndView();
+        modelAndView.addObject("tab",tab);
         List<ApiClassification> apiClassifications=new ArrayList<ApiClassification>();
-        try {
-            apiClassifications=apiClassificationService.findAllApiClassifi(projectId);
+        if (tab.equals("1")){
+            try {
+                apiClassifications=apiClassificationService.findAllApiClassifi(projectId);
+                modelAndView.addObject("apiClassifications",apiClassifications);
 
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else if("2".equals(tab)){
+            List<Suite> suites= null;
+            try {
+                suites =suiteService.findSuitsWithCase(projectId);
+                modelAndView.addObject("suites",suites);
+                for(Suite suite:suites){
+                    if(suite.getName().equals("公共测试集")){
+                        modelAndView.addObject("suiteId",suite.getId());
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
         modelAndView.addObject("projectId",projectId);
-        modelAndView.addObject("apiClassifications",apiClassifications);
+
         modelAndView.setViewName("index");
         return  modelAndView;
     }

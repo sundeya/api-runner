@@ -23,4 +23,8 @@ where api_classification.project_id=#{projectId};
             <result column="apiName" property="apiName"></result>
         </collection>
     </resultMap>
+    <select id="findAllApiClassByClassifiId" parameterType="string" resultType="apiClassification">
+        select id,name from api_classification
+        where project_id=(select project_id from api_classification where id=#{apiClassifiId});
+    </select>
 </mapper>

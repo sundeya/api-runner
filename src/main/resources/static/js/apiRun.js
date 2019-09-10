@@ -149,9 +149,9 @@ $(function(){
 		        	ifViladate = $form.validate('submitValidate');
 		        	console.info("ifViladate="+ifViladate);
 		        	if(!ifViladate)return false;
-		        	var suiteName = $('.pcAlert').last().find(".sellist-addass").find("li.active").text();
-		        	var caseName = $('.pcAlert').last().find("[name='caseName']").val();
-		        	var url=lemon.config.global.rootUrl+"/suite/addCaseToSuite?caseName="+caseName+"&suiteName="+suiteName;
+		        	var suiteId = $('.pcAlert').last().find(".sellist-addass").find("li.active").val();
+		        	var name = $('.pcAlert').last().find("[name='name']").val();
+		        	var url=lemon.config.global.rootUrl+"/cases/addCaseToSuite?name="+name+"&suiteId="+suiteId;
 		        	$.ajax({
 		        		url:url,
 		        		data:$("[name='apiRunForm']").serialize(),
@@ -192,9 +192,9 @@ $(function(){
 			type:'post',
 			dataType:'json',
 			success:function(ret){
-				if(ret.isSuccess=="1"){
-					$("[name='responseHeader']").html("<pre>"+ret.data.response.responseHeader+"</pre>");
-					$("[name='responseData']").html("<pre>"+ret.data.response.responseBody+"</pre>");
+				if(ret.status=="1"){
+					$("[name='responseHeader']").html("<pre>"+ret.data.responseheader+"</pre>");
+					$("[name='responseData']").html("<pre>"+ret.data.responseData+"</pre>");
 				}else{
 					alert(ret.message);
 				}

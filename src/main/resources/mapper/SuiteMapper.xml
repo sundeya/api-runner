@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lemon.api.api.dao.SuiteMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lemon.api.api.pojo.Suite">
+        <id column="id" property="id" />
+        <result column="project_id" property="projectId" />
+        <result column="name" property="name" />
+        <result column="description" property="description" />
+        <result column="create_user" property="createUser" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, project_id, name, description, create_user, create_time
+    </sql>
+    <select id="findSuiteByProject" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List"></include>
+        FROM
+            suite
+        WHERE
+            project_id = (
+                SELECT
+                    project.id
+                FROM
+                    api
+                INNER JOIN api_classification ON api.api_classifi_id = api_classification.id
+                INNER JOIN project on api_classification.project_id=project.id
+                where api.id=#{apiId}
+            );
+    </select>
+    <select id="findSuitsWithCase" parameterType="string" resultMap="suiteMap">
+        SELECT
+            suite.`name`,suite.id,cases.id as caseId,cases.`name` as caseName
+        FROM
+            suite
+        LEFT JOIN cases ON cases.suite_id = suite.id
+        WHERE
+            suite.project_id = #{projectId};
+    </select>
+    <resultMap id="suiteMap" type="suite">
+        <result column="id" property="id"></result>
+        <result column="name" property="name"></result>
+        <collection property="caseMenuVOs" ofType="CaseMenuVO">
+            <result column="caseId" property="caseId"></result>
+            <result column="caseName" property="caseName"></result>
+        </collection>
+    </resultMap>
+    <select id="findCaseList" parameterType="string" resultType="CaseApi">
+        SELECT DISTINCT
+          cases.id,
+          cases. NAME,
+          api.url,
+          api.id as apiId
+        FROM
+            suite
+        LEFT JOIN cases ON cases.suite_id=suite.id
+        INNER JOIN case_param_value ON case_param_value.case_id=cases.id
+        INNER JOIN api_request_param on case_param_value.api_request_param_id=api_request_param.id
+        INNER JOIN api ON api_request_param.api_id=api.id
+        where suite.id=#{suiteId};
+   </select>
+</mapper>

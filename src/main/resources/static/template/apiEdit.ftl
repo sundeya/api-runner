@@ -1,4 +1,5 @@
-<html ang="zh-CN"><head></head><body><input name="apiId" value="4" type="hidden">
+<html ang="zh-CN"><head></head><body>
+<input name="apiId" value="${apiId}" type="hidden">
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>接口预览</title>
@@ -19,7 +20,7 @@
 					</ul>
 				</div>
         		<form name="apiEditForm">
-        		<input name="id" value="4" type="hidden">
+        		<input name="apiId" value="${apiId}" type="hidden">
         		<div class="del-interpre del-interedit">
  					<div class="basicinfo-interpre basicset-interedit">
 						<div class="comtit-interpre notop">基本设置</div>
@@ -27,37 +28,39 @@
 							<div class="line-interedit line-com">
 								<label><span>*</span>接口名称：</label>
 								<div class="ipt-interedit">
-									<input name="apiName" value="登录" placeholder="接口名称" type="text">
+									<input name="apiName" value="${apiEditVO.apiName!''}" placeholder="接口名称" type="text">
 								</div>
 							</div>
 							<div class="line-interedit line-com">
 								<label><span>*</span>选择分类：</label>
 								<div class="ipt-interedit">
-									<select name="" id="">
-										<option value="cs1">公共分类</option>
-										<option value="cs2">测试1</option>
-										<option value="cs3">测试2</option>
+									<select name="apiClassifiId" id="">
+										<#if (apiClassifications??)&&(apiClassifications?size>0)>
+											<#list apiClassifications as apiClassification>
+										<option value="${apiClassification.id}" <#if "${apiEditVO.apiClassifiId}"=="${apiClassification.id}">selected="selected"</#if>>${apiClassification.name}</option>
+											</#list>
+										</#if>
 									</select>
 								</div>
 							</div>
 							<div class="line-interedit line-com">
 								<label><span>*</span>请求方法<i class="icon-doubt"></i>：</label>
 								<div class="ipt-interedit">
-									<select name="apiRequestMethod" id="" class="reqtype-interedit" style="width:15%;margin-right:0;">
-										<option value="get">GET</option>
-										<option value="post" selected="selected">POST</option>
-										<option value="put">PUT</option>
-										<option value="delete">DELETE</option>
-										<option value="head">HEAD</option>
-										<option value="option">OPTION</option>
-										<option value="patch">PATCH</option>
+									<select name="apiMethod" id="" class="reqtype-interedit" style="width:15%;margin-right:0;">
+										<option value="get"<#if "${apiEditVO.apiMethod}"=="get">selected="selected"</#if>>GET</option>
+										<option value="post" <#if "${apiEditVO.apiMethod}"=="post">selected="selected"</#if>>POST</option>
+										<option value="put" <#if "${apiEditVO.apiMethod}"=="put">selected="selected"</#if>>PUT</option>
+										<option value="delete" <#if "${apiEditVO.apiMethod}"=="delete">selected="selected"</#if>>DELETE</option>
+										<option value="head" <#if "${apiEditVO.apiMethod}"=="head">selected="selected"</#if>>HEAD</option>
+										<option value="option" <#if "${apiEditVO.apiMethod}"=="option">selected="selected"</#if>>OPTION</option>
+										<option value="patch" <#if "${apiEditVO.apiMethod}"=="patch">selected="selected"</#if>>PATCH</option>
 									</select>
 								</div>
 							</div>
 							<div class="line-interedit line-com">
 								<label><span>*</span>接口地址<i class="icon-doubt"></i>：</label>
 								<div class="ipt-interedit">
-									<input placeholder="/path" name="apiRequestUrl" value="/futureloan/mvc/api/member/login" type="text">
+									<input placeholder="/path" name="apiUrl" value="${apiEditVO.apiUrl}" type="text">
 								</div>
 							</div>
 						</div>
@@ -75,57 +78,82 @@
 							<div class="reqpdel-interedit comdel-interedit clearfix">
 								<div class="reqpcom-interredit active" id="reqpBody">
 									<div class="radiobox-interedit">
-										<input value="form" type="radio">form
-										<input value="raw" type="radio">raw
+										<#if (apiEditVO.bodyRawParams??)&&(apiEditVO.bodyRawParams?size>0)>
+										<input value="form" type="radio" name="pt">form
+										<input value="raw" type="radio" checked="" name="pt">raw
+										<#else>
+											<input value="form" type="radio" checked="" name="pt">form
+											<input value="raw" type="radio"  name="pt">raw
+										</#if>
 									</div>
 									<div class="reqpline-interedit linebox-interedit">
-										<a href="javascript:void(0);" class="btn-com">添加form参数</a>
+										<a href="javascript:void(0);" class="btn-com">添加body参数</a>
+										<#if (apiEditVO.bodyParams??)&&(apiEditVO.bodyParams?size>0)>
+											<#list apiEditVO.bodyParams as bodyParams>
 										<div class="line-interedit line-com">
-											<input name="bodyParams[0].id" value="7" type="hidden">
-											<input name="bodyParams[0].apiId" value="4" type="hidden">
-											<input name="bodyParams[0].type" value="1" type="hidden">
-											<input placeholder="name" name="bodyParams[0].name" value="mobilephone" style="width:18%" type="text">
-											<select name="bodyParams[0].paramType" id="" style="width:12%">
+											<input name="bodyParams[${bodyParams_index}].id" value="${bodyParams.id}" type="hidden">
+											<input name="bodyParams[${bodyParams_index}].apiId" value="${bodyParams.apiId}" type="hidden">
+											<input name="bodyParams[${bodyParams_index}].type" value="${bodyParams.type}" type="hidden">
+											<input placeholder="name" name="bodyParams[${bodyParams_index}].name" value="${bodyParams.name}" style="width:18%" type="text">
+											<select name="bodyParams[${bodyParams_index}].paramType" id="" style="width:12%">
 												<option value="text">text</option>
 												<option value="file">file</option>
 											</select>
-											<textarea name="bodyParams[0].exampleData" id="" value="" placeholder="参数示例" style="width:20%"></textarea>
-											<textarea name="bodyParams[0].description" id="" value="" placeholder="备注" style="width:25%">手机号</textarea>
+											<textarea name="bodyParams[${bodyParams_index}].exampleData" id="" value="" placeholder="参数示例" style="width:20%">${bodyParams.exampleData}</textarea>
+											<textarea name="bodyParams[${bodyParams_index}].description" id="" value="" placeholder="备注" style="width:25%">${bodyParams.description}</textarea>
 											<i class="icon icon-delete f-l"></i>
 										</div>
-										<div class="line-interedit line-com">
-											<input name="bodyParams[1].id" value="8" type="hidden">
-											<input name="bodyParams[1].apiId" value="4" type="hidden">
-											<input name="bodyParams[1].type" value="1" type="hidden">
-											<input placeholder="name" name="bodyParams[1].name" value="pwd" style="width:18%" type="text">
-											<select name="bodyParams[1].paramType" id="" style="width:12%">
-												<option value="text">text</option>
-												<option value="file">file</option>
-											</select>
-											<textarea name="bodyParams[1].exampleData" id="" value="" placeholder="参数示例" style="width:20%"></textarea>
-											<textarea name="bodyParams[1].description" id="" value="" placeholder="备注" style="width:25%">密码</textarea>
-											<i class="icon icon-delete f-l"></i>
+											</#list>
+										</#if>
+										<#if (apiEditVO.bodyRawParams??)&&(apiEditVO.bodyRawParams?size>0)>
+											<#list apiEditVO.bodyRawParams as bodyRawParams>
+										<div class="basicinfo-interpre reqparamsset-interedit">
+											<div class="reqplist-interedit">
+												<textarea name="bodyRawParams[0].exampleData" id="" class="remark-interedit">${bodyRawParams.exampleData}</textarea>
+												<input name="bodyRawParams[0].id" value="${bodyRawParams.id}" type="hidden">
+											</div>
 										</div>
+											</#list>
+										</#if>
 									</div>
 								</div>
 								<div class="reqpcom-interredit" id="reqpQuery">
 									<div class="reqpline-interedit linebox-interedit">
 										<a href="javascript:void(0)" class="btn-com">添加Query参数</a>
+										<#if (apiEditVO.queryParams??)&&(apiEditVO.queryParams?size>0)>
+										<#list apiEditVO.queryParams as queryParams>
+											<div class='line-interedit line-com'>"
+												<input type='hidden' name='queryParams[${queryParams_index}].id' value='${queryParams.id}'>
+												<input type='hidden' name='queryParams[${queryParams_index}].type' value='${queryParams.type}'>
+												<input type='hidden' name='queryParams[${queryParams_index}].apiId' value='${queryParams.apiId}'>
+												<input name="queryParams[${queryParams_index}].type" value="${queryParams.type}" type="hidden">
+												<input placeholder='参数名称' name='queryParams[${queryParams_index}].name' value='${queryParams.name}' style='width:18%' type='text'>
+												<textarea name='queryParams[${queryParams_index}].exampleData' id='' value='' placeholder='参数示例' style='width:22%''>${queryParams.exampleData}</textarea>
+												<textarea name='queryParams[${queryParams_index}].description' id='' value='' placeholder='备注' style='width:31%'>${queryParams.description}</textarea>
+												<i class='icon icon-delete f-l'></i>
+											</div>
+										</#list>
+										</#if>
 									</div>
 								</div>
+
 								<div class="reqpcom-interredit" id="reqpHeaders">
 									<div class="reqpline-interedit linebox-interedit">
 										<a href="javascript:void(0)" class="btn-com">添加Header参数</a>
+										<#if (apiEditVO.headerParams??)&&(apiEditVO.headerParams?size>0)>
+											<#list apiEditVO.headerParams as headerParams>
 										<div class="line-interedit line-com">
-											<input name="headerParams[0].id" value="9" type="hidden">
-											<input name="headerParams[0].apiId" value="4" type="hidden">
-											<input name="headerParams[0].type" value="3" type="hidden">
-											<input placeholder="参数名称" name="headerParams[0].name" value="Content-Type" style="width:20%" type="text">
-											<input placeholder="参数值" name="headerParams[0].value" value="application/x-www-form-urlencoded" style="width:20%" type="text">
-											<textarea name="headerParams[0].exampleData" id="" value="" placeholder="参数示例" style="width:20%"></textarea>
-											<textarea name="headerParams[0].description" id="" value="" placeholder="备注" style="width:29%">表单提交参数</textarea>
+											<input name="headerParams[${headerParams_index}].id" value="${headerParams.id}" type="hidden">
+											<input name="headerParams[${headerParams_index}].apiId" value="${headerParams.apiId}" type="hidden">
+											<input name="headerParams[${headerParams_index}].type" value="${headerParams.type}" type="hidden">
+											<input placeholder="参数名称" name="headerParams[${headerParams_index}].name" value="${headerParams.name}" style="width:20%" type="text">
+											<input placeholder="参数值" name="headerParams[${headerParams_index}].value" value="${headerParams.value!''}" style="width:20%" type="text">
+											<textarea name="headerParams[${headerParams_index}].exampleData" id="" value="" placeholder="参数示例" style="width:20%">${headerParams.exampleData}</textarea>
+											<textarea name="headerParams[${headerParams_index}].description" id="" value="" placeholder="备注" style="width:29%">${headerParams.description}</textarea>
 											<i class="icon icon-delete f-l"></i>
 										</div>
+										</#list>
+										</#if>
 									</div>
 								</div>
 							</div>

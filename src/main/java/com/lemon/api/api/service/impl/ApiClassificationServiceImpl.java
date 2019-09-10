@@ -23,4 +23,9 @@ public class ApiClassificationServiceImpl implements ApiClassificationService {
 
         return  apiCLassificationMapper.findAllApiClassifi(projectId);
     }
+
+    @Override
+    public List<ApiClassification> findAllApiClassByClassifiId(String apiClassifiId) throws Exception {
+        return apiCLassificationMapper.findAllApiClassByClassifiId(apiClassifiId);
+    }
 }

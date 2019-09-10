@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lemon.api.api.dao.CasesMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lemon.api.api.pojo.Cases">
+        <id column="id" property="id" />
+        <result column="suite_id" property="suiteId" />
+        <result column="name" property="name" />
+        <result column="create_user" property="createUser" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, suite_id, name, create_user, create_time
+    </sql>
+    <select id="findCaseEdit" parameterType="string" resultMap="caseEditMap">
+        SELECT DISTINCT
+            cases.id,
+            cases.name as caseName,
+            api.method,
+            project.`host`,
+            api.url,
+            api_request_param.`name`,
+            case_param_value.api_request_param_value,
+            api_request_param.type,
+            api_request_param.id as param_id
+        FROM
+            suite
+        LEFT JOIN cases ON cases.suite_id=suite.id
+        INNER JOIN case_param_value ON case_param_value.case_id=cases.id
+        INNER JOIN api_request_param on case_param_value.api_request_param_id=api_request_param.id
+        INNER JOIN api ON api_request_param.api_id=api.id
+        INNER JOIN api_classification on api.api_classifi_id=api_classification.id
+        INNER JOIN project on project.id=api_classification.project_id
+        where cases.id=#{caseId};
+    </select>
+    <resultMap id="caseEditMap" type="CaseEdit">
+        <result column="id" property="id"></result>
+        <result column="caseName" property="caseName"></result>
+        <result column="method" property="method"></result>
+        <result column="host" property="host"></result>
+        <result column="url" property="url"></result>
+        <collection property="requestParams" ofType="ApiRequestParam">
+            <result column="name" property="name"></result>
+            <result column="api_request_param_value" property="value"></result>
+            <result column="type" property="type"></result>
+            <result column="param_id" property="id"></result>
+        </collection>
+    </resultMap>
+
+</mapper>

@@ -92,14 +92,14 @@ $(function(){
 	});
 	$("#btnUApi").click(function(){
 		$.ajax({
-			url:lemon.config.global.rootUrl+"/suite/updateCase",
+			url:lemon.config.global.rootUrl+"/cases/updateCase",
 			data:$("[name='caseForm']").serialize(),
 			type:'post',
 			dataType:'json',
 			success:function(ret){
 				if(ret!=null){
 					alert(ret.message);
-					if(ret.isSuccess=="1"){
+					if(ret.status=="1"){
 						window.parent.location.reload();
 					}
 				}
@@ -124,14 +124,15 @@ $(function(){
 	
 	$(".btn-send").click(function(){
 		$.ajax({
-			url:lemon.config.global.rootUrl+"/api/runOnCaseEditPage",
+			url:lemon.config.global.rootUrl+"/cases/run",
 			data:$("[name='caseForm']").serialize(),
 			type:'post',
 			dataType:'json',
 			success:function(ret){
-				if(ret.isSuccess=="1"){
-					$("[name='responseHeader']").html("<pre>"+ret.data.response.responseHeader+"</pre>");
-					$("[name='responseData']").html("<pre>"+ret.data.response.responseBody+"</pre>");
+				if(ret.status=="1"){
+
+					$("[name='responseheader']").html("<pre>"+ret.data.responseheader+"</pre>");
+					$("[name='responseData']").html("<pre>"+ret.data.responseData+"</pre>");
 				}else{
 					alert(ret.message);
 				}

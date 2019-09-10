@@ -56,7 +56,7 @@
                 <h3 class="item_title">我的项目</h3>
                 <div class="item_body">
                     <#list projects as project>
-                	 <a class="item_single" href="/lemon/index/toindex?projectId=${project.id}">
+                	 <a class="item_single" href="/lemon/index/toindex?projectId=${project.id}&tab=1">
                        <span class="item_ic"></span>
                        <span class="item_font">${project.name}</span>
                    	 </a>

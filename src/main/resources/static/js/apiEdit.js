@@ -27,10 +27,10 @@ $('.linebox-interedit').on('click','.btn-com',function(){
 	var appendIndex = siblingsLength;
 	var appendHtml = "";
 	var editdingApiId = $("[name='apiId']").val();
-	if(text.indexOf("form")>=0){
+	if(text.indexOf("body")>=0){
 		//添加一行form参数
 		appendHtml += ("<div class='line-interedit line-com'>"
-			+"<input type='hidden' name='bodyParams["+appendIndex+"].type' value='1' style='width:18%'>"
+			+"<input type='hidden' name='bodyParams["+appendIndex+"].type' value='2' style='width:18%'>"
 			+"<input type='hidden' name='bodyParams["+appendIndex+"].apiId' value='"+editdingApiId+"' style='width:18%'>"
 			+"<input placeholder='name' name='bodyParams["+appendIndex+"].name' value='' style='width:18%' type='text'>"
 			+"<select name='bodyParams["+appendIndex+"].paramType' id='' style='width:12%'>"
@@ -45,7 +45,7 @@ $('.linebox-interedit').on('click','.btn-com',function(){
 	}else if(text.indexOf("Query")>=0){
 		//添加一行Query参数
 		appendHtml += ("<div class='line-interedit line-com'>"
-				+"<input type='hidden' name='queryParams["+appendIndex+"].type' value='2' style='width:18%'>"
+				+"<input type='hidden' name='queryParams["+appendIndex+"].type' value='1' style='width:18%'>"
 				+"<input type='hidden' name='queryParams["+appendIndex+"].apiId' value='"+editdingApiId+"' style='width:18%'>"
 				+"<input placeholder='参数名称' name='queryParams["+appendIndex+"].name' value='' style='width:18%' type='text'>"
 				+"<textarea name='queryParams["+appendIndex+"].exampleData' id='' value='' placeholder='参数示例' style='width:22%''></textarea>"
@@ -71,6 +71,7 @@ $('.linebox-interedit').on('click','.btn-com',function(){
 //删除当前行参数
 $('.linebox-interedit').on('click','.line-interedit .icon-delete',function(){
 	$(this).parent().remove();
+
 });
 //添加当前行参数
 $('.backdata-interedit').on('click','.line-interedit .icon-add',function(){
@@ -95,6 +96,33 @@ $('.backdata-interedit .icon-drop').click(function(){
 	}
 });
 $(function(){
+	var apiId=$("[name='apiId']").val();
+    var id=$("[name='bodyRawParams[0].id']").val();
+	var jsonparam=$("[name='bodyRawParams[0].exampleData']").val();
+	if(!jsonparam){
+        jsonparam="{}";
+    }
+	var toAddHtml="<div class='basicinfo-interpre reqparamsset-interedit'>"
+		+"<div class='reqplist-interedit'>"
+		+"<textarea name='bodyRawParams[0].exampleData' id='' class='remark-interedit'>"+jsonparam+"</textarea>"
+		+"<input name='bodyRawParams[0].type' value='4' type='hidden'/>"
+		+"<input name='bodyRawParams[0].apiId' value='"+apiId+"' type='hidden'/>"
+        +"<input name='bodyRawParams[0].id' value='"+id+"' type='hidden'/>"
+		+"</div>"
+		+"</div>";
+	$('[name="pt"]').click(function () {
+		var value=$(this).val();
+		if(value=='raw'){
+			$('#reqpBody .linebox-interedit').hide();
+            $("#reqpBody .basicinfo-interpre").remove();
+			$("#reqpBody .radiobox-interedit").append(toAddHtml);
+		}else if(value=='form'){
+			$('#reqpBody .linebox-interedit').show();
+			$("#reqpBody .basicinfo-interpre").remove();
+		}
+	});
+
+
 	//设置保存的固定按钮外层父元素的宽度
 	//$('.comfirm-interedit').width($('.del-interedit').width());
 	//返回数据设置-模板的备注填写弹框

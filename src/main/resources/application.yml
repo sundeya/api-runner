@@ -18,3 +18,7 @@ spring:
 mybatis-plus:
   mapper-locations: mapper/*.xml
   type-aliases-package: com.lemon.api.api.pojo
+logging:
+  level:
+    root: info
+    com.lemon.api.api.dao: trace

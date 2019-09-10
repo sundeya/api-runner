@@ -1,10 +1,7 @@
 package com.lemon.api.api.dao;
 
-import com.lemon.api.api.pojo.Api;
+import com.lemon.api.api.pojo.*;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.lemon.api.api.pojo.ApiPreview;
-import com.lemon.api.api.pojo.MenuVO;
-import com.lemon.api.api.pojo.ShowApiList;
 
 import java.util.List;
 
@@ -21,4 +18,8 @@ public interface ApiMapper extends BaseMapper<Api> {
     public List<ShowApiList> finaAllApisByClassifi(String apiClassificationId) throws Exception;
     public MenuVO findMenuVOs(String apiId)throws Exception;
     public ApiPreview findApiPreview(String apiId) throws Exception;
+    public void editSave(ApiEditVO apiEditVO) throws Exception;
+    public void updateBasicInfo(ApiEditVO apiEditVO) throws Exception;
+    public ApiEditVO findApiEdit(String apiId) throws Exception;
+    ApiRunVO findApiRunVO(String apiId) throws Exception;
 }

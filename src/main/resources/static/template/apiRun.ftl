@@ -18,27 +18,27 @@
 					</ul>
 				</div>
         		<form name="apiRunForm">
-        		<input name="id" value="4" type="hidden">
-        		<input name="apiRequestMethod" value="post" type="hidden">
-        		<input name="host" value="http://ta.lemonban.com" type="hidden">
+        		<input name="id" value="${apiRunVO.id}" type="hidden">
+        		<input name="method" value="${apiRunVO.method!''}" type="hidden">
+        		<input name="host" value="${apiRunVO.host}" type="hidden">
         		<input name="projectId" value="4" type="hidden">
         		<div class="del-interrun">
         			<div class="envirset-interrun">
 						<div class="line-interedit line-interrun line-com clearfix">
-							<select style="width:10%;" name="apiRequestMethod" disabled="disabled">
-									<option value="get">GET</option>
-									<option value="post" selected="selected">POST</option>
-									<option value="put">PUT</option>
-									<option value="delete">DELETE</option>
-									<option value="head">HEAD</option>
-									<option value="option">OPTION</option>
-									<option value="patch">PATCH</option>
+							<select style="width:10%;" name="method" disabled="disabled">
+									<option value="get" <#if "${apiRunVO.method}"=="get">selected="selected"</#if>>GET</option>
+									<option value="post" <#if "${apiRunVO.method}"=="post">selected="selected"</#if>>POST</option>
+									<option value="put" <#if "${apiRunVO.method}"=="put">selected="selected"</#if>>PUT</option>
+									<option value="delete" <#if "${apiRunVO.method}"=="delete">selected="selected"</#if>>DELETE</option>
+									<option value="head" <#if "${apiRunVO.method}"=="head">selected="selected"</#if>>HEAD</option>
+									<option value="option" <#if "${apiRunVO.method}"=="option">selected="selected"</#if>>OPTION</option>
+									<option value="patch" <#if "${apiRunVO.method}"=="patch">selected="selected"</#if>>PATCH</option>
 							</select>
 							<div class="ipt-interedit f-l" style="margin-left:5px;width:30%;">
-								<input class="iptenvir-interrun" value="http://ta.lemonban.com" disabled="disabled" type="text">
+								<input class="iptenvir-interrun" value="${apiRunVO.host}" disabled="disabled" type="text">
 							</div>
 							<div class="ipt-interedit" style="margin-left:5px;width:53%;">
-								<input readonly="readonly" class="disabled" name="apiRequestUrl" value="/futureloan/mvc/api/member/login" placeholder="接口名称" type="text">
+								<input readonly="readonly" class="disabled" name="url" value="${apiRunVO.url!''}" placeholder="接口名称" type="text">
 							</div>
 						</div>
 						<div class="btnbox-interrun f-r">
@@ -48,55 +48,83 @@
         			</div>
         			<div class="paramlist-interrun">
 						<div class="paramcom-interrun radius4">
+							<div class="paramtit-interrun"><i class="icon-arrow active"></i>QUERY</div>
+							<div class="paramline-interrun active">
+								<#if (apiRunVO.queryParams??)&&(apiRunVO.queryParams?size>0)>
+									<#list apiRunVO.queryParams as queryParams>
+										<div class="line-com line-interrun">
+											<input name="queryParams[${queryParams_index}].id" value="${queryParams.id}" type="hidden">
+											<div class="ipt-interrun f-l" style="width:15%">
+												<div class="ltipt-interrun">
+													<input class=" disabled" readonly="readonly" value="${queryParams.name}" name="queryParams[${queryParams_index}].name" type="text">
+												</div>
+												<div class="equal-interrun f-r">=</div>
+												<input class="disabled f-r" disabled="" checked="" type="checkbox">
+											</div>
+											<div class="ipt-interrun f-l" style="width:85%">
+												<input placeholder="参数值" style="width:100%" name="queryParams[${queryParams_index}].value" value="" type="text">
+												<div class="edit-interrun f-l"></div>
+											</div>
+										</div>
+									</#list>
+								</#if>
+							</div>
+						</div>
+						<div class="paramcom-interrun radius4">
 							<div class="paramtit-interrun"><i class="icon-arrow active"></i>BODY(F9)</div>
 							<div class="paramline-interrun active">
+								<#if (apiRunVO.bodyParams??)&&(apiRunVO.bodyParams?size>0)>
+									<#list apiRunVO.bodyParams as bodyParams>
 								<div class="line-com line-interrun">
-									<input name="bodyParams[0].id" value="7" type="hidden">
+									<input name="bodyParams[${bodyParams_index}].id" value="${bodyParams.id}" type="hidden">
 									<div class="ipt-interrun f-l" style="width:15%">
 										<div class="ltipt-interrun">
-											<input class=" disabled" readonly="readonly" value="mobilephone" name="bodyParams[0].name" type="text">
+											<input class=" disabled" readonly="readonly" value="${bodyParams.name}" name="bodyParams[${bodyParams_index}].name" type="text">
 										</div>
 										<div class="equal-interrun f-r">=</div>
 										<input class="disabled f-r" disabled="" checked="" type="checkbox">
 									</div>
 									<div class="ipt-interrun f-l" style="width:85%">
-										<input placeholder="参数值" style="width:100%" name="bodyParams[0].value" value="" type="text">
+										<input placeholder="参数值" style="width:100%" name="bodyParams[${bodyParams_index}].value" value="" type="text">
 										<div class="edit-interrun f-l"></div>
 									</div>
 								</div>
-								<div class="line-com line-interrun">
-									<input name="bodyParams[1].id" value="8" type="hidden">
-									<div class="ipt-interrun f-l" style="width:15%">
-										<div class="ltipt-interrun">
-											<input class=" disabled" readonly="readonly" value="pwd" name="bodyParams[1].name" type="text">
-										</div>
-										<div class="equal-interrun f-r">=</div>
-										<input class="disabled f-r" disabled="" checked="" type="checkbox">
-									</div>
-									<div class="ipt-interrun f-l" style="width:85%">
-										<input placeholder="参数值" style="width:100%" name="bodyParams[1].value" value="" type="text">
-										<div class="edit-interrun f-l"></div>
-									</div>
-								</div>
+									</#list>
+								</#if>
+                                <#if (apiRunVO.bodyRawParams??)&&(apiRunVO.bodyRawParams?size>0)>
+                                    <#list apiRunVO.bodyRawParams as bodyRawParams>
+                                        <div class="basicinfo-interpre reqparamsset-interedit">
+											<input name="bodyRawParams[${bodyRawParams_index}].id" value="${bodyRawParams.id}" type="hidden">
+                                            <div class="reqplist-interedit">
+                                                <textarea name="bodyRawParams[0].exampleData" id="" class="remark-interedit">${bodyRawParams.exampleData}</textarea>
+                                                <input name="bodyRawParams[0].id" value="${bodyRawParams.id}" type="hidden">
+                                            </div>
+                                        </div>
+                                    </#list>
+                                </#if>
 							</div>
 						</div>
 						<div class="paramcom-interrun radius4">
 							<div class="paramtit-interrun"><i class="icon-arrow active"></i>HEADERS</div>
 							<div class="paramline-interrun active">
+								<#if (apiRunVO.headerParams??)&&(apiRunVO.headerParams?size>0)>
+								<#list apiRunVO.headerParams as headerParams>
 								<div class="line-com line-interrun">
-									<input name="headerParams[0].id" value="9" type="hidden">
+									<input name="headerParams[${headerParams_index}].id" value="${headerParams.id}" type="hidden">
 									<div class="ipt-interrun f-l" style="width:15%">
 										<div class="ltipt-interrun">
-											<input class=" disabled" readonly="readonly" value="Content-Type" name="headerParams[0].name" type="text">
+											<input class=" disabled" readonly="readonly" value="${headerParams.name}" name="headerParams[${headerParams_index}].name" type="text">
 										</div>
 										<div class="equal-interrun f-r">=</div>
 										<input class="disabled f-r" disabled="" checked="" type="checkbox">
 									</div>
 									<div class="ipt-interrun f-l" style="width:85%">
-										<input placeholder="参数值" style="width:100%" name="headerParams[0].value" value="application/x-www-form-urlencoded" type="text">
+										<input placeholder="参数值" style="width:100%" name="headerParams[${headerParams_index}].value" value="" type="text">
 										<div class="edit-interrun f-l"></div>
 									</div>
 								</div>
+								</#list>
+								</#if>
 							</div>
 						</div>
         			</div>
@@ -108,19 +136,13 @@
 							<div class="comlist-interrun headlist-interrun f-l">
 								<div class="titlist-interrun">Headers</div>
 								<div class="txtlist-interrun radius4" name="responseHeader">
-									<pre>{
-	"Transfer-Encoding":"chunked",
-	"Server":"nginx/1.12.0",
-	"Connection":"keep-alive",
-	"Date":"Sun, 28 Jul 2019 03:12:50 GMT",
-	"Content-Type":"application/json;charset=UTF-8"
-}</pre>
+
 								</div>
 							</div>
 							<div class="comlist-interrun bodylist-interrun f-l">
 								<div class="titlist-interrun">Body</div>
 								<div class="txtlist-interrun radius4" name="responseData">
-									<pre>{"status":0,"code":"20103","data":null,"msg":"手机号不能为空"}</pre>
+
 								</div>
 							</div>
 						</div>
@@ -135,14 +157,17 @@
 			<div class="top-addass">
 				<div class="line-com">
 					<label>接口用例名：</label>
-					<input placeholder="请输入接口用例名称" name="caseName" class="required" data-valid="isNonEmpty" data-error="内容不能为空" type="text">
+					<input placeholder="请输入接口用例名称" name="name" class="required" data-valid="isNonEmpty" data-error="内容不能为空" type="text">
 				</div>
 			</div>
 			<div class="sellist-addass">
 				<div class="seltit-addass">请选择添加到的集合：</div>
 				<ul>
-				
-				<li class="active"><i class="icon-file"></i>公共测试集</li><li class=""><i class="icon-file"></i>注册用例集</li><li class=""><i class="icon-file"></i>登录用例集</li><li class=""><i class="icon-file"></i>取现用例集</li></ul>
+				<#if suites?? && (suites?size>0)>
+					<#list suites as suite>
+				<li <#if suite.name=='公共测试集'>class="active"</#if> name="" value="${suite.id}"><i class="icon-file"></i>${suite.name}</li>
+					</#list>
+				</#if>
 			</div>
 			<div class="new-addass radius4">
 				<div class="newline-addass comsib-comdul">

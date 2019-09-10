@@ -40,14 +40,114 @@
             WHERE
                 api.id = #{apiId};
     </select>
-    <select id="findApiPreview" parameterType="string" resultType="apiPreview">
+    <select id="findApiPreview" parameterType="string" resultMap="apiPreviewMap">
         SELECT
-            api.name as apiName,api.method as apiMethod,api.url as apiUrl,user.username as createUser,api.create_time as createUser
-        FROM
-              api
-        LEFT JOIN user
-        ON user.id = api.create_user
-        WHERE
-              api.id = #{apiId};
+        api.id,
+        api. NAME AS apiName,
+        api.method AS apiMethod,
+        api.url AS apiUrl,
+        `user`.username AS createUser,
+        api.create_time AS createTime,
+        api_request_param.id as param_id,
+        api_request_param.api_id,
+        api_request_param.`name`,
+        api_request_param.param_type,
+        api_request_param.type,
+        api_request_param.example_data,
+        api_request_param.description
+    FROM
+        api
+    LEFT JOIN api_request_param ON api.id = api_request_param.api_id
+    INNER JOIN `user` ON `user`.id = api.create_user
+    WHERE
+        api.id = #{apiId};
     </select>
+    <resultMap id="apiPreviewMap" type="ApiPreview">
+        <result column="id" property="apiId"></result>
+        <result column="apiName" property="apiName"></result>
+        <result column="apiMethod" property="apiMethod"></result>
+        <result column="apiUrl" property="apiUrl"></result>
+        <result column="createUser" property="createUser"></result>
+        <result column="createTime" property="createTime"></result>
+        <collection property="requestParams" ofType="ApiRequestParam">
+            <result column="param_id" property="id"></result>
+            <result column="api_id" property="apiId"></result>
+            <result column="name" property="name"></result>
+            <result column="param_type" property="paramType"></result>
+            <result column="type" property="type"></result>
+            <result column="example_data" property="exampleData"></result>
+            <result column="description" property="description"></result>
+        </collection>
+    </resultMap>
+    <update id="updateBasicInfo" parameterType="apiEditVO">
+update api set name=#{apiName},method=#{apiMethod},api_classifi_id=#{apiClassifiId},url=#{apiUrl} where id=#{apiId};
+    </update>
+    <select id="findApiEdit" parameterType="string" resultMap="RequestParamMap">
+        SELECT
+        t1.id,
+        t1.name,
+        t1.method,
+        t1.url,
+        t1.api_classifi_id,
+        t2.id as param_id,
+        t2.api_id,
+        t2.`name` as param_name,
+        t2.param_type,
+        t2.type,
+        t2.example_data,
+        t2.description
+    FROM
+        api t1
+    LEFT JOIN api_request_param t2 ON t1.id = t2.api_id
+    WHERE
+        t1.id = #{apiId};
+    </select>
+    <resultMap id="RequestParamMap" type="apiEditVO">
+        <result column="id" property="apiId"></result>
+        <result column="name" property="apiName"></result>
+        <result column="method" property="apiMethod"></result>
+        <result column="api_classifi_id" property="apiClassifiId"></result>
+        <result column="url" property="apiUrl"></result>
+        <collection property="requestParams" ofType="ApiRequestParam">
+            <result column="param_id" property="id"></result>
+            <result column="api_id" property="apiId"></result>
+            <result column="param_name" property="name"></result>
+            <result column="param_type" property="paramType"></result>
+            <result column="type" property="type"></result>
+            <result column="example_data" property="exampleData"></result>
+            <result column="description" property="description"></result>
+        </collection>
+
+    </resultMap>
+    <select id="findApiRunVO" parameterType="string" resultMap="apiRunVOMap">
+        SELECT
+        api.id,
+        api.method AS apiMethod,
+        project.`host`,
+        api.url AS apiUrl,
+        api_request_param.id as paramID,
+        api_request_param.`name`,
+        api_request_param.type,
+        api_request_param.example_data
+
+    FROM
+        api
+    LEFT JOIN api_request_param ON api.id = api_request_param.api_id
+    INNER JOIN api_classification on api.api_classifi_id=api_classification.id
+    INNER JOIN project on api_classification.project_id=project.id
+    WHERE
+        api.id = #{apiId};
+    </select>
+    <resultMap id="apiRunVOMap" type="ApiRunVO">
+        <result column="id" property="id"></result>
+        <result column="apiMethod" property="method"></result>
+        <result column="host" property="host"></result>
+        <result column="apiUrl" property="url"></result>
+        <collection property="requestParams" ofType="ApiRequestParam">
+            <result column="paramID" property="id"></result>
+            <result column="name" property="name"></result>
+            <result column="type" property="type"></result>
+            <result column="example_data" property="exampleData"></result>
+        </collection>
+    </resultMap>
 </mapper>

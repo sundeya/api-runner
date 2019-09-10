@@ -48,13 +48,14 @@
             <li><a href="#">设置</a></li>
         </ul>
     </div>
+    <#if tab=="1">
     <div class="main-interlist com-module clearfix">
         <div class="left-interlist f-l" style="height: 297px;">	
             <div class="tab-interlist">
                 <div class="tabtype-interlist">
                     <ul class="clearfix">     
-                        <li class="active"><a href="index.ftl">接口列表</a></li>
-                        <li><a href="index2.html">测试集合</a></li>
+                        <li class="active"><a href="/lemon/index/toindex?tab=1&projectId=${projectId}">接口列表</a></li>
+                        <li><a href="/lemon/index/toindex?tab=2&projectId=${projectId}">测试集合</a></li>
                     </ul>
                 </div>
                 <div class="srchbox-interlist clearfix">
@@ -62,6 +63,7 @@
 					<a href="javascript:;" class="btn-addfl btn-com f-r" id="addfl">添加分类</a>
                 </div>
             </div>
+
             <div class="list-interlist" id="listInter">
                 <ul class="type_menu">
                     <li class="active">
@@ -118,6 +120,78 @@
             </div>
         </div>
     </form>
+    <#else>
+        <div class="main-interlist com-module clearfix">
+            <div class="left-interlist f-l">
+                <div class="tab-interlist">
+                    <div class="tabtype-interlist">
+                        <ul class="clearfix">
+                            <li ><a href="/lemon/index/toindex?tab=1&projectId=${projectId}">接口列表</a></li>
+                            <li class="active"><a href="/lemon/index/toindex?tab=2&projectId=${projectId}">测试集合</a></li>
+                        </ul>
+                    </div>
+                    <div class="srchbox-interlist clearfix">
+                        <input type="text" placeholder="搜索用例" class="input-com f-l">
+                        <a href="javascript:;" class="btn-addfl btn-com f-r" id="addjh">添加集合</a>
+                    </div>
+                </div>
+                <div class="list-interlist" id="listInter">
+                    <ul class="type_menu">
+                        <#if suites?? && (suites?size>0)>
+                        <#list suites as suite>
+                        <li>
+                            <div class="menu-interlist">
+                                <a href="/lemon/html/caseList.html" target="rightIframe">
+                                    <i class="icon-file"></i>
+                                    <span>${suite.name}</span>
+                                    <div class="hanmenu-interlist">
+                                        <i class="icon-add"></i>
+                                        <i class="icon-edit"></i>
+                                        <i class="icon-delete"></i>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <!-- 默认展开第一个套件 -->
+                            <ul class="tmenu-interlist <#if "${suite.name}"="公共测试集">active</#if>">
+                                <!-- 加载此套件下的所有测试用例 -->
+                                <#if (suite.caseMenuVOs??) && (suite.caseMenuVOs?size>0)>
+                                <#list suite.caseMenuVOs as aa>
+                                <li class="">
+                                    <a href="/lemon/html/caseEdit.html" target="rightIframe">
+                                        ${aa.caseName}
+                                        <div class="hantmenu-interlist">
+                                            <i class="icon-copy"></i>
+                                            <i class="icon-delete"></i>
+                                        </div>
+                                    </a>
+                                </li>
+                                </#list>
+                                </#if>
+                            </ul>
+                        </li>
+                        </#list>
+                        </#if>
+                    </ul>
+                </div>
+            </div>
+            <iframe class="rightIframe f-l" name="rightIframe" src="/lemon/suite/toCaseList?suiteId=${suiteId}" onload="loadFrame(this);" scrolling="yes" frameborder="0"></iframe>
+        </div>
+        <!-- 测试集合弹窗 -->
+        <form id="addSuite">
+            <div class="dialog-addinter">
+                <div class="line-addinter form_control clearfix" >
+                    <label><span>*</span>集合名称：</label>
+                    <input type="text" placeholder="分类名称" class="required" data-valid="isNonEmpty" data-error="内容不能为空" name="name">
+                    <span class="valid_message"></span>
+                </div>
+                <div class="line-addinter form_control clearfix describe">
+                    <label>描述：</label>
+                    <textarea type="text" class="path-addinter" placeholder="描述" name="description"></textarea>
+                </div>
+            </div>
+        </form>
+    </#if>
 </div>
 <script type="text/javascript" src="/lemon/js/jquery-1.11.3.js"></script>
 <script type="text/javascript" src="/lemon/js/jquery.pagination.js"></script>
