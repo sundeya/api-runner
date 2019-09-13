@@ -4,6 +4,7 @@ import com.lemon.api.api.pojo.ApiRunVO;
 import com.lemon.api.api.pojo.CaseEdit;
 import com.lemon.api.api.pojo.Cases;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lemon.api.api.pojo.MenuVO;
 
 /**
  * <p>
@@ -16,4 +17,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface CasesMapper extends BaseMapper<Cases> {
     void addCaseToSuite(Cases cases, ApiRunVO apiRunVO) throws Exception;
     CaseEdit findCaseEdit(String caseId) throws Exception;
+    MenuVO findSuiteSelectedMenu(String caseId) throws Exception;
 }

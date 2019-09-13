@@ -35,13 +35,16 @@ function attachValidate(selector){
 }
 
 
-function selectMenuAndTurn2Page(menuFindurl,data,turn2Page){
+function selectMenuAndTurn2Page(menuFindurl,data,turn2Page,refer){
 	$.post(menuFindurl,data,function(ret){
 		if(ret.status=="1"){
 			//一级菜单名
 			var firstLevelMenu = ret.data.firstLevelMenu;
 			//二级菜单名
 			var secondLevelMenu = ret.data.secondLevelMenu;
+			if(refer=="测试集合"){
+				window.parent.location=turn2Page+"&first="+firstLevelMenu+"&second="+secondLevelMenu+"&apiId="+data.apiId+"&refer="+refer;
+			}
 			//选中对应菜单
 			//先判断当前一级菜单是否已经是选中状态
 			if(!parent.$(window.parent.document).find("a:contains("+secondLevelMenu+")").parent("li").parent().hasClass("active")){

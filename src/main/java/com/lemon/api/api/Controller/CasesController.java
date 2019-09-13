@@ -73,5 +73,21 @@ public class CasesController {
 
         return result;
     }
+    @RequestMapping("/findSuiteSelectedMenu")
+    public Result findSuiteSelectedMenu( String caseId){
+        Result result =null;
+        MenuVO menuVO= null;
+        try {
+            menuVO = iCasesService.findSuiteSelectedMenu(caseId);
+            result=new Result("1",menuVO,"查询一二级集合菜单成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            result=new Result("0","服务器异常");
+        }
+
+
+
+        return result;
+    }
 
 }

@@ -49,5 +49,14 @@
             <result column="param_id" property="id"></result>
         </collection>
     </resultMap>
+    <select id="findSuiteSelectedMenu" parameterType="string" resultType="MenuVO">
+    SELECT
+        suite.`name` as firstLevelMenu,cases.`name` as secondLevelMenu
+    FROM
+        suite
+    LEFT JOIN cases ON suite.id = cases.suite_id
+    WHERE
+        cases.id = #{caseId};
+    </select>
 
 </mapper>

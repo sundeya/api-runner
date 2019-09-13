@@ -146,12 +146,22 @@ $(function(){
 	
 	$("[name='caseEditHref']").click(function(){
 		var baseUrl = lemon.config.global.rootUrl;
-		var menuFindurl = baseUrl+"/index/findSuiteSelectedMenu";
+		var menuFindurl = baseUrl+"/cases/findSuiteSelectedMenu";
 		var caseId = $(this).parent().parent().find("[name='caseId']").val();
 		var data = {"caseId":caseId};
-		var turn2Page = baseUrl+"/suite/caseEdit?id="+caseId;
+		var turn2Page = baseUrl+"/cases/toCaseEdit?caseId="+caseId;
 		////跳转到对应页面，并选中对应菜单
 		selectMenuAndTurn2Page(menuFindurl,data,turn2Page);
+	});
+
+	$("[name='apiUrlHref']").click(function(){
+		var baseUrl = lemon.config.global.rootUrl;
+		var menuFindurl = baseUrl+"/index/findApiSelectedMenu";
+		var apiId = $(this).parent().parent().find("[name='apiId']").val();
+		var data = {"apiId":apiId};
+		var turn2Page = baseUrl+"/index/toindex?tab=1&projectId=1";
+		////跳转到对应页面，并选中对应菜单
+		selectMenuAndTurn2Page(menuFindurl,data,turn2Page,"测试集合");
 	});
 	
 })

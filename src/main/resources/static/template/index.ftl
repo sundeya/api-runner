@@ -86,10 +86,10 @@
                                 </div>
                             </a>
                         </div>
-                        <ul class="tmenu-interlist">
+                        <ul class="tmenu-interlist <#if crossTable.first?? &&("${crossTable.first}"=="${apiClassification.name}")>active</#if>">
                         	<!-- 加载此分类下的所有接口 -->
                             <#list apiClassification.apiAndclassifis as apiAndclassifi>
-                            <li class="">
+                            <li <#if crossTable.second?? &&("${crossTable.second}"=="${apiAndclassifi.apiName}")>class="active"</#if>>
                                 <a href="/lemon/api/toApiView?apiId=${apiAndclassifi.apiId}" target="rightIframe">
                                    	${apiAndclassifi.apiName}
                                     <div class="hantmenu-interlist">
@@ -104,7 +104,12 @@
                 </ul>
             </div>
         </div>
-       	<iframe class="rightIframe f-l" name="rightIframe" src="/lemon/api/toApilist?projectId=${projectId}" onload="loadFrame(this);" scrolling="yes" style="height: 297px;" frameborder="0"></iframe>
+        <#if crossTable.refer?? && ('${crossTable.refer}'=='测试集合')>
+<iframe class="rightIframe f-l" name="rightIframe" src="/lemon/api/toApiView?apiId=${crossTable.apiId}" onload="loadFrame(this);" scrolling="yes" style="height: 297px;" frameborder="0"></iframe>
+<#else>
+<iframe class="rightIframe f-l" name="rightIframe" src="/lemon/api/toApilist?projectId=${projectId}" onload="loadFrame(this);" scrolling="yes" style="height: 297px;" frameborder="0"></iframe>
+</#if>
+
     </div>
     <!-- 添加分类窗口 -->
     <form id="addClassification">
@@ -141,7 +146,7 @@
                         <#list suites as suite>
                         <li>
                             <div class="menu-interlist">
-                                <a href="/lemon/html/caseList.html" target="rightIframe">
+                                <a href="/lemon/suite/toCaseList?suiteId=${suite.id}" target="rightIframe">
                                     <i class="icon-file"></i>
                                     <span>${suite.name}</span>
                                     <div class="hanmenu-interlist">
@@ -158,7 +163,7 @@
                                 <#if (suite.caseMenuVOs??) && (suite.caseMenuVOs?size>0)>
                                 <#list suite.caseMenuVOs as aa>
                                 <li class="">
-                                    <a href="/lemon/html/caseEdit.html" target="rightIframe">
+                                    <a href="/lemon/cases/toCaseEdit?caseId=${aa.caseId}" target="rightIframe">
                                         ${aa.caseName}
                                         <div class="hantmenu-interlist">
                                             <i class="icon-copy"></i>

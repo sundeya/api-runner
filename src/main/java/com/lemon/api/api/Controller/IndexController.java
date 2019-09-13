@@ -24,7 +24,7 @@ public class IndexController {
     @Autowired
     private ISuiteService suiteService;
     @RequestMapping("/toindex")
-    public ModelAndView modelAndView(String projectId,String tab){
+    public ModelAndView modelAndView(String projectId,String tab,CrossTable crossTable){
         ModelAndView modelAndView=new ModelAndView();
         modelAndView.addObject("tab",tab);
         List<ApiClassification> apiClassifications=new ArrayList<ApiClassification>();
@@ -32,6 +32,10 @@ public class IndexController {
             try {
                 apiClassifications=apiClassificationService.findAllApiClassifi(projectId);
                 modelAndView.addObject("apiClassifications",apiClassifications);
+                if(crossTable!=null){
+                    modelAndView.addObject("crossTable",crossTable);
+                }
+
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -60,6 +64,7 @@ public class IndexController {
     public Result findApiSelectedMenu(String apiId){
         Result result=null;
         try {
+            //查询接口的一级二级菜单
             MenuVO menuVO= iApiService.findMenuVOs(apiId);
             result =new Result("1",menuVO,"获取数据成功");
         } catch (Exception e) {

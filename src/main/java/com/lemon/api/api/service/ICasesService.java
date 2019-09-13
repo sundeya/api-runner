@@ -1,9 +1,6 @@
 package com.lemon.api.api.service;
 
-import com.lemon.api.api.pojo.ApiRunVO;
-import com.lemon.api.api.pojo.CaseEdit;
-import com.lemon.api.api.pojo.CaseOnlineResponse;
-import com.lemon.api.api.pojo.Cases;
+import com.lemon.api.api.pojo.*;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -23,4 +20,6 @@ public interface ICasesService extends IService<Cases> {
     void updateCase(CaseEdit caseEdit) throws Exception;
 
     CaseOnlineResponse run(CaseEdit caseEdit) throws  Exception;
+
+    MenuVO findSuiteSelectedMenu(String caseId) throws Exception;
 }

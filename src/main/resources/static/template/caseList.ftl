@@ -39,12 +39,13 @@
 				<#if (caseLists??) && (caseLists?size>0)>
 					<#list caseLists as caseList>
 					<tr>
-						<input name="caseId" value="3" type="hidden">
-						<td><a href="/lemon/cases/toCaseEdit?caseId=${caseList.id}" name="caseEditHref">${caseList.name}</a></td>
+						<input name="caseId" value="${caseList.id}" type="hidden">
+						<input name="apiId" value="${caseList.apiId}" type="hidden">
+						<td><a href="#" name="caseEditHref">${caseList.name}</a></td>
 						<td><i class="icon-fail"></i></td>
-						<td><a href="caseEdit.ftl"
+						<td><a href="#" name="apiUrlHref"
 							class="link-path">${caseList.url}</a></td>
-						<td><a href="#" class="btn-testrep btn-com btn-default">测试报告</a></td>
+						<td><a href="#"  class="btn-testrep btn-com btn-default">测试报告</a></td>
 					</tr>
 				</#list>
 				</#if>

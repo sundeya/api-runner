@@ -92,6 +92,7 @@ public class ApiController {
     public ModelAndView toApiView(String apiId){
         ModelAndView modelAndView=new ModelAndView();
         try {
+            //查询接口预览页面的数据
             ApiPreview apiPreview=iApiService.findApiPreview(apiId);
             modelAndView.addObject("apiPreview",apiPreview);
         } catch (Exception e) {
@@ -106,6 +107,7 @@ public class ApiController {
         ModelAndView modelAndView=new ModelAndView();
         try {
             ApiEditVO apiEditVO=iApiService.findApiEdit(apiId);
+            //查询接口编辑页面的数据
             List<ApiClassification> apiClassifications=apiClassificationService.findAllApiClassByClassifiId(apiEditVO.getApiClassifiId());
             modelAndView.addObject("apiEditVO",apiEditVO);
             modelAndView.addObject("apiClassifications",apiClassifications);

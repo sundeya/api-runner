@@ -106,4 +106,9 @@ public class CasesServiceImpl extends ServiceImpl<CasesMapper, Cases> implements
         BeanUtils.copyProperties(apiOnlineResponse,caseOnlineResponse);
         return  caseOnlineResponse;
     }
+
+    @Override
+    public MenuVO findSuiteSelectedMenu(String caseId) throws Exception {
+        return casesMapper.findSuiteSelectedMenu(caseId);
+    }
 }
